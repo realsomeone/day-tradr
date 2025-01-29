@@ -1,4 +1,5 @@
 import requests
+from colorama import Fore
 from  keys import *
 import json
 
@@ -52,6 +53,7 @@ def buy(sym, amnt):
         "APCA-API-SECRET-KEY": KEY[1]
     }
     
+    print(Fore.GREEN + "Buying " + sym + Fore.RESET)
     response = requests.post(url, headers=headers, data=json.dumps(payload))
     return json.loads(response.text)
 
@@ -72,6 +74,7 @@ def sell(sym):
         "APCA-API-SECRET-KEY": KEY[1]
     }
     
+    print(Fore.RED + "Selling " + sym + Fore.RESET)
     response = requests.post(url, headers=headers, data=json.dumps(payload))
     return json.loads(response.text)
 
@@ -97,3 +100,9 @@ def get_clock():
     
     response = requests.get(url, headers=headers)
     return json.loads(response.text)
+
+def oneminleft(clock):
+    now = clock['timestamp'].split('T')[1].split(':')[:2]
+    close = clock['next_close'].split('T')[1].split(':')[:2]
+    if now[0] == close[0] and int(close[1]) - int(now[1]) == 1:
+        return True

@@ -1,6 +1,7 @@
 from api import *
 from config import *
 from colorama import Fore
+import sys
 import time
 
 def get_avg_val(data, amnt):
@@ -24,26 +25,37 @@ def buyorsell(sym, stocks):
     return 0
 
 def main():
+    open = False
     trading = ['AMZN', 'AAPL', 'TSLA']
     stocks = dict()
     for sym in trading:
         stocks[sym] = [get_old_prices(sym), None]
     while True:
         market = get_clock()
-        for sym in stocks:
-            stocks[sym][0].append(get_price(sym))
-        if market['is_open']:
+        if not oneminleft(market):
             for sym in stocks:
-                consensus = buyorsell(sym, stocks)
-                if consensus == 1 and stocks[sym][1] != 1:
-                    buy(sym, 5)
-                    print(Fore.GREEN + "Buying " + sym + Fore.RESET)
-                elif consensus == -1 and stocks[sym][1] is not None:
-                    sell(sym)
-                    print(Fore.RED + "Selling " + sym + Fore.RESET)
+                stocks[sym][0].append(get_price(sym))
+            if market['is_open']:
+                open = True
+                for sym in stocks:
+                    consensus = buyorsell(sym, stocks)
+                    if consensus == 1 and stocks[sym][1] != 1:
+                        buy(sym, 5)
+                    elif consensus == -1 and stocks[sym][1] is not None:
+                        sell(sym)
+                    else:
+                        print(Fore.YELLOW + "Waiting on " + sym + Fore.RESET)
+            else: 
+                if not open: 
+                    print(Fore.RED + "Market is closed. WAITING..." + Fore.RESET)
                 else:
-                    print(Fore.YELLOW + "Waiting on " + sym + Fore.RESET)
-        else: print(Fore.RED + "Market is closed. WAITING..." + Fore.RESET)
+                    print(Fore.CYAN + "Market closed for today. Finished up.")
+                    print(Fore.GREEN + "Cash: $" + get_cash() + Fore.RESET)
+                    sys.exit()
+        else: 
+            print("1 minute left in the market. Selling...")
+            for sym in stocks:
+                sell(sym)
         print(Fore.YELLOW + "Sleeping for 1 minute..." + Fore.RESET)
         time.sleep(60)
         
