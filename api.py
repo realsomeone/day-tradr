@@ -13,7 +13,10 @@ def get_old_prices(sym):
 
     response = requests.get(url, headers=headers)
     bars = json.loads(response.text)['bars']
-    return [bar['vw'] for bar in bars]
+    try:
+        return [bar['vw'] for bar in bars]
+    except:
+        return 'no data'
 
 def get_price(sym):
     url = f'https://data.alpaca.markets/v2/stocks/{sym}/bars/latest'
@@ -106,3 +109,14 @@ def oneminleft(clock):
     close = clock['next_close'].split('T')[1].split(':')[:2]
     if now[0] == close[0] and int(close[1]) - int(now[1]) == 1:
         return True
+    
+def get_cash():
+    url = f'https://{ENDP}api.alpaca.markets/v2/account'
+    headers = {
+        "accept": "application/json",
+        "APCA-API-KEY-ID": KEY[0],
+        "APCA-API-SECRET-KEY": KEY[1]
+    }
+    
+    response = requests.get(url, headers=headers)
+    return json.loads(response.text)['equity']

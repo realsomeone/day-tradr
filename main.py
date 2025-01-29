@@ -29,7 +29,11 @@ def main():
     trading = ['AMZN', 'AAPL', 'TSLA']
     stocks = dict()
     for sym in trading:
-        stocks[sym] = [get_old_prices(sym), None]
+        prices = get_old_prices(sym)
+        if prices == 'no data':
+            stocks[sym] = [[], None]
+        else:
+            stocks[sym] = [prices, None]
     while True:
         market = get_clock()
         if not oneminleft(market):
