@@ -13,11 +13,11 @@ def get_avg_val(data, amnt):
 def buyorsell(sym, stocks):
     lowavg = round(get_avg_val(stocks[sym][0], LOAVG) * 100)
     highavg = round(get_avg_val(stocks[sym][0], HIAVG) * 100)
-    print(Fore.CYAN + f"Low Average: {lowavg}\t High Average: {highavg}" + Fore.RESET)
+    # print(Fore.CYAN + f"Low Average: {lowavg}\t High Average: {highavg}" + Fore.RESET)
     if lowavg == 0 or highavg == 0: return 0
     if highavg < lowavg:
         consensus = 1
-    elif highavg > highavg:
+    elif highavg > lowavg:
         consensus = -1
     else:
         return 0
@@ -45,10 +45,15 @@ def main():
                     consensus = buyorsell(sym, stocks)
                     if consensus == 1 and stocks[sym][1] != 1:
                         buy(sym, 5)
+                        stocks[sym][1] = 1
                     elif consensus == -1 and stocks[sym][1] is not None:
                         sell(sym)
+                        stocks[sym][1] = -1
                     else:
-                        print(Fore.YELLOW + "Waiting on " + sym + Fore.RESET)
+                        if stocks[sym][1] == 1:
+                            print(Fore.CYAN + sym + Fore.RESET, end=' ')
+                        else:
+                            print(Fore.YELLOW + sym + Fore.RESET, end=' ')
             else: 
                 if not open: 
                     print(Fore.RED + "Market is closed. WAITING..." + Fore.RESET)
@@ -56,12 +61,8 @@ def main():
                     print(Fore.CYAN + "Market closed for today. Finished up.")
                     print(Fore.GREEN + "Cash: $" + get_cash() + Fore.RESET)
                     sys.exit()
-        else: 
-            print("1 minute left in the market. Selling...")
-            for sym in stocks:
-                sell(sym)
-        print(Fore.YELLOW + "Sleeping for 1 minute..." + Fore.RESET)
-        time.sleep(60)
+        print()
+        time.sleep(60*5)
         
 if __name__ == "__main__":
     main()

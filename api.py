@@ -56,7 +56,7 @@ def buy(sym, amnt):
         "APCA-API-SECRET-KEY": KEY[1]
     }
     
-    print(Fore.GREEN + "Buying " + sym + Fore.RESET)
+    print(Fore.GREEN + sym + Fore.RESET, end=' ')
     response = requests.post(url, headers=headers, data=json.dumps(payload))
     return json.loads(response.text)
 
@@ -77,7 +77,7 @@ def sell(sym):
         "APCA-API-SECRET-KEY": KEY[1]
     }
     
-    print(Fore.RED + "Selling " + sym + Fore.RESET)
+    print(Fore.RED + sym + Fore.RESET, end=' ')
     response = requests.post(url, headers=headers, data=json.dumps(payload))
     return json.loads(response.text)
 
