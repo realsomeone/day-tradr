@@ -58,7 +58,7 @@ def buy(sym, amnt):
     
     print(Fore.GREEN + sym + Fore.RESET, end=' ')
     response = requests.post(url, headers=headers, data=json.dumps(payload))
-    return json.loads(response.text['notional'])
+    return json.loads(response.text)
 
 def sell(sym, bought_price):
     url = f'https://{ENDP}api.alpaca.markets/v2/orders'
@@ -68,7 +68,7 @@ def sell(sym, bought_price):
         "time_in_force": "day",
         "side": 'sell',
         "symbol": sym,
-        "notional": get4rel(bought_price),
+        "notional": get4rel(bought_price, sym),
     }
     
     headers = {

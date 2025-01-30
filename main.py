@@ -43,7 +43,7 @@ def main():
                 open = True
                 for sym in stocks:
                     consensus = buyorsell(sym, stocks)
-                    if consensus == 1 and (stocks[sym][1] != 1 or stocks[sym][1] != -1):
+                    if consensus == 1 and (stocks[sym][1] != 1 and stocks[sym][1] != -1):
                         stocks[sym][2] = get_price(sym)
                         buy(sym, 5)
                         stocks[sym][1] = 1
