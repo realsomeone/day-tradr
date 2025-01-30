@@ -123,4 +123,4 @@ def get_cash():
 
 def get4rel(amnt, sym):
     p = get_price(sym)
-    return amnt / p * 4
+    return round(5 - (amnt / p * 0.5), 2)
