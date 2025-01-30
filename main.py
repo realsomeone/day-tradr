@@ -31,9 +31,9 @@ def main():
     for sym in trading:
         prices = get_old_prices(sym)
         if prices == 'no data':
-            stocks[sym] = [[], None]
+            stocks[sym] = [[], None, 0]
         else:
-            stocks[sym] = [prices, None]
+            stocks[sym] = [prices, None, 0]
     while True:
         market = get_clock()
         if not oneminleft(market):
@@ -44,6 +44,7 @@ def main():
                 for sym in stocks:
                     consensus = buyorsell(sym, stocks)
                     if consensus == 1 and stocks[sym][1] != 1:
+                        stocks[sym][2] = get_price(sym)
                         buy(sym, 5)
                         stocks[sym][1] = 1
                     elif consensus == -1 and stocks[sym][1] is not None:

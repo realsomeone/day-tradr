@@ -1,2 +1,2 @@
-LOAVG = 10
-HIAVG = 20
+LOAVG = 3
+HIAVG = 10

@@ -27,7 +27,7 @@ def get_price(sym):
     }
     
     response = requests.get(url, headers=headers)
-    return json.loads(response.text)['bar']['vw']
+    return json.loads(response.text)['bar']['c']
 
 def syminfo(sym):
     url = f'https://{ENDP}api.alpaca.markets/v2/assets/{sym}'
@@ -58,9 +58,9 @@ def buy(sym, amnt):
     
     print(Fore.GREEN + sym + Fore.RESET, end=' ')
     response = requests.post(url, headers=headers, data=json.dumps(payload))
-    return json.loads(response.text)
+    return json.loads(response.text['notional'])
 
-def sell(sym):
+def sell(sym, amnt):
     url = f'https://{ENDP}api.alpaca.markets/v2/orders'
     
     payload = {
@@ -68,7 +68,7 @@ def sell(sym):
         "time_in_force": "day",
         "side": 'sell',
         "symbol": sym,
-        "notional": get_all_amnt(sym),
+        "notional": get4rel(amnt),
     }
     
     headers = {
@@ -91,7 +91,7 @@ def get_all_amnt(sym):
     }
     
     response = requests.get(url, headers=headers)
-    return json.loads(response.text)['qty_avaliable']
+    return json.loads(response.text)['qty_available']
 
 def get_clock():
     url = f'https://{ENDP}api.alpaca.markets/v2/clock'
@@ -120,3 +120,7 @@ def get_cash():
     
     response = requests.get(url, headers=headers)
     return json.loads(response.text)['equity']
+
+def get4rel(amnt, sym):
+    p = get_price(sym)
+    return amnt / p * 4
