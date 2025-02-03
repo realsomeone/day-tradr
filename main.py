@@ -17,7 +17,7 @@ def buyorsell(sym, stocks):
     if lowavg == 0 or highavg == 0: return 0
     if highavg < lowavg:
         consensus = 1
-    elif highavg > lowavg:
+    elif lowavg / highavg < 0.95:
         consensus = -1
     else:
         return 0
