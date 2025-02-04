@@ -1,7 +1,7 @@
 import trader 
 import datetime
 import api
-import os
+import win32api
 
 def main():
     time = api.get_clock()
@@ -10,5 +10,7 @@ def main():
     if today == stockday:
         trader.main()
     else:
-        os.system("rundll32.exe powrprof.dll,SetSuspendState 0,1,0")
-    
+        win32api.SetSystemPowerState(True, True)
+
+if __name__ == '__main__':
+    main()
