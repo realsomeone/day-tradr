@@ -1,6 +1,6 @@
 import requests
 from colorama import Fore
-from  keys import *
+from keys import *
 import json
 
 def get_old_prices(sym):
