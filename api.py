@@ -3,7 +3,15 @@ from colorama import Fore
 from keys import *
 import json
 
-def get_old_prices(sym):
+def get_old_prices(sym) -> list:
+    """Get Old Prices
+
+    Args:
+        sym (string): stock to search up
+
+    Returns:
+        list: Price History. If errs out, returns empty list.
+    """
     url = f"https://data.alpaca.markets/v2/stocks/{sym}/bars?timeframe=1T&feed=iex"
     headers = {
         "accept": "application/json",
@@ -16,9 +24,17 @@ def get_old_prices(sym):
     try:
         return [bar['vw'] for bar in bars]
     except:
-        return 'no data'
+        return []
 
-def get_price(sym):
+def get_price(sym) -> int:
+    """Get Price
+
+    Args:
+        sym (string): stock to search up
+
+    Returns:
+        int: Current stock price
+    """
     url = f'https://data.alpaca.markets/v2/stocks/{sym}/bars/latest'
     headers = {
         "accept": "application/json",
